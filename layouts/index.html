@@ -23,7 +23,7 @@ for the Behind the Badge Project, a division of <a href="https://www.muckrock.co
 
 <h1>Latest Work</h1>
 
-<div class="posts-list">
+<div class="posts-list" id="posts-redacted">
     <div class="posts-grid">
         {{ $data := dict }}
         {{ $path := "portfolio.json" }}
@@ -50,6 +50,36 @@ for the Behind the Badge Project, a division of <a href="https://www.muckrock.co
     </div>
 </div>
 
+<div class="posts-list" id="posts-full">
+    <div class="posts-grid">
+        {{ $data := dict }}
+        {{ $path := "portfolio.json" }}
+        {{ with resources.Get $path }}
+            {{ with . | transform.Unmarshal }}
+                {{ $data = . }}
+                {{ range first 12 $data.clips }}
+                    <a href="{{.link}}" class="post-wrapper"><div class="post">
+                            {{if .award }}
+                                <div class="award">{{ .award }}</div>
+                            {{ end }}
+                            <img class="post-image" src="{{.image}}">
+                            <div class="post-blurb">
+                                <h3 class="post-title">{{.title}}</h3>
+                                <p>{{.date}} | <a class='publication'>{{.publication}}</a></p>
+                            </div>
+                        </div></a>
+                {{ end }}
+                <div style="clear: both"></div>
+            {{ end }}
+        {{ else }}
+            {{ errorf "Unable to get global resource %q" $path }}
+        {{ end }}
+    </div>
+</div>
+
+<h2 class="read-more" id="stories-more"><a>Read more <i class="fa-solid fa-caret-down"></i></a></h2>
+<h2 class="read-more" id="stories-less"><a>Read less <i class="fa-solid fa-caret-up"></i></a></h2>
+
 <h1>Dev Projects</h1>
 
 <div class="posts-list">
@@ -74,5 +104,7 @@ for the Behind the Badge Project, a division of <a href="https://www.muckrock.co
         {{ end }}
     </div>
 </div>
+
+<h2 class="read-more"><a href="https://github.com/declanrjb">See more <i class="fa-solid fa-arrow-right"></i></a></h2>
 
 {{ end }}
